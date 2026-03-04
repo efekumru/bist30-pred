@@ -14,8 +14,8 @@
       --green: #34d399;
       --red: #f87171;
       --yellow: #fbbf24;
-      --text: #d1d1db;
-      --muted: #4a4a5a;
+      --text: #e8e8f0;
+      --muted: #8888a0;
       --mono: 'Geist Mono', monospace;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; }
@@ -115,26 +115,18 @@
     <div class="e-block">
       <span class="e-label">Prophet</span>
       <span class="e-sig" id="sig-prophet">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="acc-prophet">—</span>
     </div>
     <div class="e-block">
       <span class="e-label">LightGBM</span>
       <span class="e-sig" id="sig-lgbm">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="acc-lgbm">—</span>
     </div>
     <div class="e-block">
       <span class="e-label">XGBoost</span>
       <span class="e-sig" id="sig-xgb">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="acc-xgb">—</span>
     </div>
     <div class="e-block">
       <span class="e-label">Chronos</span>
       <span class="e-sig" id="sig-chronos">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="acc-chronos">—</span>
     </div>
   </div>
 </div>
@@ -224,12 +216,7 @@ function renderEndeks(d) {
   setSig('sig-xgb',     d.xgb);
   setSig('sig-chronos', d.chronos);
 
-  document.getElementById('acc-lgbm').textContent    = d.lgbm_acc    ? `CV ${d.lgbm_acc}%`       : '—';
-  document.getElementById('acc-xgb').textContent     = d.xgb_acc     ? `CV ${d.xgb_acc}%`        : '—';
-  const pd = parseFloat(d.prophet_deg);
-  document.getElementById('acc-prophet').textContent = isNaN(pd)     ? '—' : `${pd>0?'+':''}${pd.toFixed(2)}%`;
-  const cd = parseFloat(d.chronos_deg);
-  document.getElementById('acc-chronos').textContent = isNaN(cd)     ? '—' : `${cd>0?'+':''}${cd.toFixed(2)}%`;
+
 }
 
 function render() {
