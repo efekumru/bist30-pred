@@ -183,18 +183,36 @@ function parseCSV(text) {
 function sigClass(v) { return parseInt(v)===1?'up':parseInt(v)===0?'dn':'na'; }
 function sigText(v)  { return parseInt(v)===1?'Up':parseInt(v)===0?'Down':'—'; }
 
+function cleanKarar(raw) {
+  if (!raw) return { text: '—', dir: 'neu' };
+  const r = raw.toUpperCase();
+  if (r.includes('UP') || r.includes('YÜKSELİŞ') || r.includes('YUKSELIS'))
+    return { text: 'UP', dir: 'up' };
+  if (r.includes('DOWN') || r.includes('DÜŞÜŞ') || r.includes('DUSUS'))
+    return { text: 'DOWN', dir: 'dn' };
+  return { text: 'NEUTRAL', dir: 'neu' };
+}
+
+function cleanGuc(raw) {
+  if (!raw) return '';
+  // already X/4 format
+  if (/\d\/4/.test(raw)) return raw.match(/\d\/4/)[0];
+  // old format: extract number
+  const m = raw.match(/\d/);
+  return m ? m[0]+'/4' : '';
+}
+
 function renderEndeks(d) {
   const op = parseFloat(d.open);
   document.getElementById('xu030Open').textContent =
     isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('endeksTarih').textContent = d.tarih || '—';
 
-  const isUp = d.karar && d.karar.includes('UP');
-  const isDn = d.karar && d.karar.includes('DOWN');
-  const kEl  = document.getElementById('endeksKarar');
-  kEl.textContent = d.karar || '—';
-  kEl.className   = 'endeks-karar ' + (isUp?'up':isDn?'dn':'neu');
-  document.getElementById('endeksGuc').textContent = d.guc || '';
+  const k   = cleanKarar(d.karar);
+  const kEl = document.getElementById('endeksKarar');
+  kEl.textContent = k.text;
+  kEl.className   = 'endeks-karar ' + k.dir;
+  document.getElementById('endeksGuc').textContent = cleanGuc(d.guc);
 
   const setSig = (id, v) => {
     const el = document.getElementById(id);
@@ -225,9 +243,9 @@ function render() {
   if (!rows.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="7">No signals found.</td></tr>'; return; }
 
   tbody.innerHTML = rows.map((r,i) => {
-    const isUp = r.Karar && r.Karar.includes('UP');
-    const isDn = r.Karar && r.Karar.includes('DOWN');
-    const kCls = isUp?'up':isDn?'dn':'neu';
+    const k    = cleanKarar(r.Karar);
+    const kCls = k.dir;
+    const kTxt = k.text;
     const guc  = parseInt(r.Guc)||0;
     const gTxt = `${guc}/4`;
     const op   = parseFloat(r.Open);
@@ -239,7 +257,7 @@ function render() {
       <td class="td-sig ${sigClass(r.LightGBM)}">${sigText(r.LightGBM)}</td>
       <td class="td-sig ${sigClass(r.XGBoost)} hide-mobile">${sigText(r.XGBoost)}</td>
       <td class="td-sig ${sigClass(r.Chronos)} hide-mobile">${sigText(r.Chronos)}</td>
-      <td><span class="td-karar ${kCls}">${r.Karar||'—'}</span><span class="td-guc">${gTxt}</span></td>
+      <td><span class="td-karar ${kCls}">${kTxt}</span><span class="td-guc">${gTxt}</span></td>
     </tr>`;
   }).join('');
 }
