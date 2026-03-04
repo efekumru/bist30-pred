@@ -1,1 +1,1 @@
-{"open": 15711.4, "tarih": "2026-02-25", "karar": "ORTA DÜŞÜŞ", "guc": "✅ ORTA (2/3)", "prophet": 1, "prophet_deg": 2.69, "lgbm": 0, "lgbm_acc": 53.2, "xgb": 0, "xgb_acc": 50.1}
+{"open": 15711.4, "tarih": "2026-02-25", "karar": "ORTA YÜKSELİŞ", "guc": "✅ ORTA (2/3)", "prophet": 1, "prophet_deg": 2.86, "lgbm": 1, "lgbm_acc": 55.1, "xgb": 0, "xgb_acc": 51.2}
