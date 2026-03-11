@@ -1,14 +1,14 @@
 {
-  "open": 14331.98,
-  "tarih": "2026-03-09",
-  "karar": "NEUTRAL",
-  "guc": "2/4",
+  "open": 15000.13,
+  "tarih": "2026-03-11",
+  "karar": "UP",
+  "guc": "4/4",
   "prophet": 1,
-  "prophet_deg": 8.58,
-  "lgbm": 0,
-  "lgbm_acc": 54.1,
+  "prophet_deg": 3.44,
+  "lgbm": 1,
+  "lgbm_acc": 54.0,
   "xgb": 1,
-  "xgb_acc": 50.0,
-  "chronos": 0,
-  "chronos_deg": -0.76
+  "xgb_acc": 50.1,
+  "chronos": 1,
+  "chronos_deg": 0.25
 }
