@@ -97,7 +97,7 @@
 <nav>
   <div class="logo">XU030 — Up/Down</div>
   <div class="nav-meta">
-    <span class="nav-label">Predicting close direction vs open</span>
+    <span class="nav-label">Predicting tomorrow's close vs today's close</span>
     <span class="nav-date" id="navDate">—</span>
   </div>
 </nav>
@@ -143,7 +143,7 @@
     <thead>
       <tr>
         <th>Ticker</th>
-        <th>Open</th>
+        <th>Kapanış</th>
         <th>Prophet</th>
         <th>LightGBM</th>
         <th class="hide-mobile">XGBoost</th>
@@ -195,7 +195,7 @@ function cleanGuc(raw) {
 }
 
 function renderEndeks(d) {
-  const op = parseFloat(d.open);
+  const op = parseFloat(d.close ?? d.open);
   document.getElementById('xu030Open').textContent =
     isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('endeksTarih').textContent = d.tarih || '—';
@@ -235,7 +235,7 @@ function render() {
     const kTxt = k.text;
     const guc  = parseInt(r.Guc)||0;
     const gTxt = `${guc}/4`;
-    const op   = parseFloat(r.Open);
+    const op   = parseFloat(r.Kapanis ?? r.Open);
     const opStr= isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
     return `<tr style="animation:fadeIn .18s ${i*8}ms both">
       <td class="td-sym">${r.Hisse||'—'}</td>
