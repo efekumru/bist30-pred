@@ -1,14 +1,16 @@
 {
-  "open": 15123.07,
-  "tarih": "2026-03-18",
-  "karar": "UP",
-  "guc": "3/4",
+  "close": 14963.2,
+  "tarih": "2026-03-19",
+  "karar": "NEUTRAL",
+  "guc": "1/4",
   "prophet": 1,
-  "prophet_deg": 0.4,
-  "lgbm": 0,
-  "lgbm_acc": 54.0,
-  "xgb": 1,
-  "xgb_acc": 50.6,
-  "chronos": 1,
-  "chronos_deg": 0.23
+  "prophet_deg": 0.81,
+  "lgbm": -1,
+  "lgbm_acc": 52.1,
+  "lgbm_neutral": true,
+  "xgb": -1,
+  "xgb_acc": 51.7,
+  "xgb_neutral": true,
+  "chronos": 0,
+  "chronos_deg": -0.12
 }
