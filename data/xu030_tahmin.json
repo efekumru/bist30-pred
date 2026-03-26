@@ -1,16 +1,16 @@
 {
-  "close": 14847.0,
-  "tarih": "2026-03-23",
+  "close": 14789.93,
+  "tarih": "2026-03-26",
   "karar": "UP",
-  "guc": "2/4",
+  "guc": "3/4",
   "prophet": 1,
-  "prophet_deg": 1.01,
-  "lgbm": -1,
-  "lgbm_acc": 50.9,
-  "lgbm_neutral": true,
+  "prophet_deg": 1.56,
+  "lgbm": 1,
+  "lgbm_acc": 53.0,
+  "lgbm_neutral": false,
   "xgb": -1,
-  "xgb_acc": 52.9,
+  "xgb_acc": 52.6,
   "xgb_neutral": true,
   "chronos": 1,
-  "chronos_deg": 0.25
+  "chronos_deg": 0.05
 }
