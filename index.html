@@ -14,6 +14,7 @@
       --green: #34d399;
       --red: #f87171;
       --yellow: #fbbf24;
+      --blue: #60a5fa;
       --text: #e8e8f0;
       --muted: #8888a0;
       --mono: 'Geist Mono', monospace;
@@ -50,6 +51,7 @@
     .e-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
     .e-sig { font-size: 11px; font-weight: 600; }
     .e-sig.up { color: var(--green); } .e-sig.dn { color: var(--red); } .e-sig.na { color: var(--muted); }
+    .e-sig.poz { color: var(--green); } .e-sig.neg { color: var(--red); }
     .e-acc { font-size: 11px; color: var(--muted); }
     .e-sep { font-size: 10px; color: var(--border2); margin: 0 4px; }
 
@@ -77,9 +79,11 @@
     .td-open { color: var(--muted); }
     .td-sig  { font-weight: 600; font-size: 11px; }
     .td-sig.up { color: var(--green); } .td-sig.dn { color: var(--red); } .td-sig.na { color: var(--muted); }
+    .td-wave { font-size: 11px; }
+    .td-wave.poz { color: var(--green); } .td-wave.neg { color: var(--red); } .td-wave.na { color: var(--muted); }
     .td-karar { font-weight: 600; font-size: 11px; }
     .td-karar.up  { color: var(--green); } .td-karar.dn  { color: var(--red); } .td-karar.neu { color: var(--yellow); }
-    .td-guc { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+    .td-guven { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
 
     .empty-row td { text-align: center; padding: 48px; color: var(--muted); font-size: 11px; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
@@ -107,26 +111,29 @@
     <span class="endeks-ticker">BIST30</span>
     <span class="endeks-open" id="xu030Open">—</span>
     <span class="endeks-karar" id="endeksKarar">—</span>
-    <span style="font-size:11px;color:var(--muted);margin-left:4px;" id="endeksGuc"></span>
   </div>
   <div class="endeks-sub" id="endeksTarih">—</div>
 
   <div class="endeks-row2">
     <div class="e-block">
-      <span class="e-label">Prophet</span>
-      <span class="e-sig" id="sig-prophet">—</span>
+      <span class="e-label">LightGBM+XGB</span>
+      <span class="e-sig" id="sig-model">—</span>
+      <span class="e-sep">·</span>
+      <span class="e-acc" id="sig-guven">—</span>
     </div>
     <div class="e-block">
-      <span class="e-label">LightGBM</span>
-      <span class="e-sig" id="sig-lgbm">—</span>
+      <span class="e-label">Wave</span>
+      <span class="e-sig" id="sig-wave-regime">—</span>
+      <span class="e-sep">·</span>
+      <span class="e-acc" id="sig-wave-val">—</span>
     </div>
-    <div class="e-block">
-      <span class="e-label">XGBoost</span>
-      <span class="e-sig" id="sig-xgb">—</span>
+    <div class="e-block hide-mobile">
+      <span class="e-label">Filter</span>
+      <span class="e-acc" id="sig-filter">—</span>
     </div>
-    <div class="e-block">
-      <span class="e-label">Chronos</span>
-      <span class="e-sig" id="sig-chronos">—</span>
+    <div class="e-block hide-mobile">
+      <span class="e-label">CV Acc</span>
+      <span class="e-acc" id="sig-acc">—</span>
     </div>
   </div>
 </div>
@@ -136,7 +143,7 @@
     <button class="f-btn active" data-sig="ALL">All</button>
     <button class="f-btn" data-sig="UP">Up</button>
     <button class="f-btn" data-sig="DOWN">Down</button>
-    <button class="f-btn" data-sig="STRONG">4/4</button>
+    <button class="f-btn" data-sig="NEUTRAL">Neutral</button>
     <div class="table-meta" id="lastUpdate">—</div>
   </div>
   <table>
@@ -144,11 +151,11 @@
       <tr>
         <th>Ticker</th>
         <th>Kapanış</th>
-        <th>Prophet</th>
-        <th>LightGBM</th>
-        <th class="hide-mobile">XGBoost</th>
-        <th class="hide-mobile">Chronos</th>
-        <th>Decision</th>
+        <th>Model</th>
+        <th class="hide-mobile">Güven</th>
+        <th class="hide-mobile">Wave</th>
+        <th class="hide-mobile">W.Val</th>
+        <th>Karar</th>
       </tr>
     </thead>
     <tbody id="tableBody">
@@ -172,26 +179,26 @@ function parseCSV(text) {
   });
 }
 
-function sigClass(v) { return parseInt(v)===1?'up':parseInt(v)===0?'dn':'na'; }
-function sigText(v)  { return parseInt(v)===1?'Up':parseInt(v)===0?'Down':'—'; }
+function sigClass(v) {
+  const n = parseInt(v);
+  return n===1?'up':n===0?'dn':'na';
+}
+function sigText(v) {
+  const n = parseInt(v);
+  return n===1?'Up':n===0?'Down':'—';
+}
 
 function cleanKarar(raw) {
   if (!raw) return { text: '—', dir: 'neu' };
   const r = raw.toUpperCase();
-  if (r.includes('UP') || r.includes('YÜKSELİŞ') || r.includes('YUKSELIS'))
-    return { text: 'UP', dir: 'up' };
-  if (r.includes('DOWN') || r.includes('DÜŞÜŞ') || r.includes('DUSUS'))
-    return { text: 'DOWN', dir: 'dn' };
+  if (r.includes('UP')) return { text: 'UP', dir: 'up' };
+  if (r.includes('DOWN')) return { text: 'DOWN', dir: 'dn' };
   return { text: 'NEUTRAL', dir: 'neu' };
 }
 
-function cleanGuc(raw) {
-  if (!raw) return '';
-  // already X/4 format
-  if (/\d\/4/.test(raw)) return raw.match(/\d\/4/)[0];
-  // old format: extract number
-  const m = raw.match(/\d/);
-  return m ? m[0]+'/4' : '';
+function waveRegimeClass(r) {
+  if (!r) return 'na';
+  return r.toUpperCase().includes('POZ') ? 'poz' : 'neg';
 }
 
 function renderEndeks(d) {
@@ -204,47 +211,58 @@ function renderEndeks(d) {
   const kEl = document.getElementById('endeksKarar');
   kEl.textContent = k.text;
   kEl.className   = 'endeks-karar ' + k.dir;
-  document.getElementById('endeksGuc').textContent = cleanGuc(d.guc);
 
-  const setSig = (id, v) => {
-    const el = document.getElementById(id);
-    el.textContent = sigText(v);
-    el.className   = 'e-sig ' + sigClass(v);
-  };
-  setSig('sig-prophet', d.prophet);
-  setSig('sig-lgbm',    d.lgbm);
-  setSig('sig-xgb',     d.xgb);
-  setSig('sig-chronos', d.chronos);
+  // Model sinyali
+  const modelEl = document.getElementById('sig-model');
+  const modelYon = d.model_yon ?? d.lgbm;
+  modelEl.textContent = sigText(modelYon);
+  modelEl.className   = 'e-sig ' + sigClass(modelYon);
+  document.getElementById('sig-guven').textContent =
+    d.model_guven ? d.model_guven + '%' : '—';
 
+  // Wave
+  const waveEl = document.getElementById('sig-wave-regime');
+  const regime = d.wave_regime || '';
+  waveEl.textContent = regime || '—';
+  waveEl.className   = 'e-sig ' + waveRegimeClass(regime);
+  document.getElementById('sig-wave-val').textContent =
+    d.wave_val !== undefined ? parseFloat(d.wave_val).toFixed(3) : '—';
 
+  // Filter note & CV acc
+  document.getElementById('sig-filter').textContent = d.filter_note || '—';
+  document.getElementById('sig-acc').textContent =
+    d.model_acc ? d.model_acc + '%' : '—';
 }
 
 function render() {
   let rows = [...allRows];
-  if (activeFilter==='UP')        rows = rows.filter(r => r.Karar && r.Karar.includes('UP'));
-  else if (activeFilter==='DOWN') rows = rows.filter(r => r.Karar && r.Karar.includes('DOWN'));
-  else if (activeFilter==='STRONG') rows = rows.filter(r => r.Guc === '4');
-  rows.sort((a,b) => (parseInt(b.Guc)||0) - (parseInt(a.Guc)||0));
+  if (activeFilter==='UP')      rows = rows.filter(r => cleanKarar(r.Karar).dir==='up');
+  else if (activeFilter==='DOWN')    rows = rows.filter(r => cleanKarar(r.Karar).dir==='dn');
+  else if (activeFilter==='NEUTRAL') rows = rows.filter(r => cleanKarar(r.Karar).dir==='neu');
 
   const tbody = document.getElementById('tableBody');
-  if (!rows.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="7">No signals found.</td></tr>'; return; }
+  if (!rows.length) {
+    tbody.innerHTML='<tr class="empty-row"><td colspan="7">No signals found.</td></tr>';
+    return;
+  }
 
   tbody.innerHTML = rows.map((r,i) => {
     const k    = cleanKarar(r.Karar);
-    const kCls = k.dir;
-    const kTxt = k.text;
-    const guc  = parseInt(r.Guc)||0;
-    const gTxt = `${guc}/4`;
     const op   = parseFloat(r.Kapanis ?? r.Open);
     const opStr= isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const guven= r.Guven ? r.Guven+'%' : '—';
+    const waveVal = r.Wave_val !== undefined ? parseFloat(r.Wave_val).toFixed(2) : '—';
+    const wRegime = r.Wave_regime || '';
+    const wCls = waveRegimeClass(wRegime);
+
     return `<tr style="animation:fadeIn .18s ${i*8}ms both">
       <td class="td-sym">${r.Hisse||'—'}</td>
       <td class="td-open">${opStr}</td>
-      <td class="td-sig ${sigClass(r.Prophet)}">${sigText(r.Prophet)}</td>
       <td class="td-sig ${sigClass(r.LightGBM)}">${sigText(r.LightGBM)}</td>
-      <td class="td-sig ${sigClass(r.XGBoost)} hide-mobile">${sigText(r.XGBoost)}</td>
-      <td class="td-sig ${sigClass(r.Chronos)} hide-mobile">${sigText(r.Chronos)}</td>
-      <td><span class="td-karar ${kCls}">${kTxt}</span><span class="td-guc">${gTxt}</span></td>
+      <td class="td-open hide-mobile">${guven}</td>
+      <td class="td-wave ${wCls} hide-mobile">${wRegime||'—'}</td>
+      <td class="td-open hide-mobile">${waveVal}</td>
+      <td><span class="td-karar ${k.dir}">${k.text}</span><span class="td-guven">${r.Cakisma||''}</span></td>
     </tr>`;
   }).join('');
 }

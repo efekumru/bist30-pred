@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIST30 — Wave Sinyaller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0e0e10;
+      --surface: #16161a;
+      --border: #2a2a30;
+      --cyan: #4dd8e0;
+      --blue: #7b9cff;
+      --green: #4dd8a0;
+      --red: #ff5e72;
+      --yellow: #f5c842;
+      --text: #e8e8f0;
+      --muted: #6b6b7e;
+      --dim: #2a2a32;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 60px; border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+    .nav-logo span { color: var(--cyan); }
+    .nav-tag {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(77,216,160,.08); border: 1px solid rgba(77,216,160,.2);
+      border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--green);
+    }
+    .nav-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+    .hero { padding: 64px 60px 48px; }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 58px); font-weight: 700;
+      line-height: 1.1; letter-spacing: -1.5px; color: #fff; margin-bottom: 16px;
+    }
+    .hero h1 .c { color: var(--cyan); }
+    .hero h1 .b { color: var(--blue); }
+    .hero p { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 480px; margin-bottom: 36px; }
+
+    .summary { display: flex; gap: 12px; padding: 0 60px 40px; flex-wrap: wrap; }
+    .pill {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 24px;
+    }
+    .pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .pill-num { font-size: 30px; font-weight: 700; line-height: 1; }
+    .pill-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .pill.al  .pill-dot { background: var(--green); }
+    .pill.sat .pill-dot { background: var(--red); }
+    .pill.tut .pill-dot { background: var(--yellow); }
+    .pill.al  .pill-num { color: var(--green); }
+    .pill.sat .pill-num { color: var(--red); }
+    .pill.tut .pill-num { color: var(--yellow); }
+
+    .filters {
+      display: flex; gap: 8px; padding: 0 60px 20px;
+      flex-wrap: wrap; align-items: center;
+    }
+    .f-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      padding: 7px 16px; border-radius: 6px; cursor: pointer; transition: all .15s; letter-spacing: 0.3px;
+    }
+    .f-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .f-btn.active       { background: var(--cyan);   border-color: var(--cyan);   color: #0e0e10; }
+    .f-btn.active.al    { background: var(--green);  border-color: var(--green);  color: #0e0e10; }
+    .f-btn.active.sat   { background: var(--red);    border-color: var(--red);    color: #fff; }
+    .f-btn.active.tut   { background: var(--yellow); border-color: var(--yellow); color: #0e0e10; }
+    .update-info { margin-left: auto; font-size: 11px; color: var(--muted); }
+    .update-info b { color: var(--cyan); }
+
+    .list-wrap { padding: 0 60px 80px; }
+    .list-header {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      padding: 10px 20px; font-size: 11px; color: var(--muted);
+      letter-spacing: 0.8px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border); margin-bottom: 4px;
+    }
+
+    .stock-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      align-items: center; padding: 16px 20px;
+      border-bottom: 1px solid var(--dim); border-radius: 8px;
+      transition: background .12s;
+      animation: slideIn .25s ease both;
+    }
+    @keyframes slideIn { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform:none; } }
+    .stock-row:hover { background: rgba(255,255,255,.025); }
+
+    .sym-block { display: flex; flex-direction: column; gap: 3px; }
+    .sym-name { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.2px; }
+    .sym-sub  { font-size: 11px; color: var(--muted); }
+
+    .sig-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 6px; font-size: 12px;
+      font-weight: 600; letter-spacing: 0.5px; width: fit-content;
+    }
+    .sig-badge::before { content:''; width:5px; height:5px; border-radius:50%; }
+    .sig-badge.AL  { background:rgba(77,216,160,.1); color:var(--green);  border:1px solid rgba(77,216,160,.25); }
+    .sig-badge.AL::before  { background: var(--green); }
+    .sig-badge.SAT { background:rgba(255,94,114,.1);  color:var(--red);   border:1px solid rgba(255,94,114,.25); }
+    .sig-badge.SAT::before { background: var(--red); }
+    .sig-badge.TUT { background:rgba(245,200,66,.1);  color:var(--yellow);border:1px solid rgba(245,200,66,.25); }
+    .sig-badge.TUT::before { background: var(--yellow); }
+    .sig-badge.NA, .sig-badge.ERR { background:rgba(107,107,126,.1); color:var(--muted); border:1px solid rgba(107,107,126,.2); }
+    .sig-badge.NA::before, .sig-badge.ERR::before { background: var(--muted); }
+
+    .wave-inner { display: flex; flex-direction: column; gap: 5px; }
+    .wave-val { font-size: 13px; font-weight: 500; }
+    .wave-val.low  { color: var(--green); }
+    .wave-val.high { color: var(--red); }
+    .wave-val.mid  { color: var(--yellow); }
+    .wave-val.na   { color: var(--muted); }
+    .wave-track { width: 72px; height: 3px; background: var(--dim); border-radius: 2px; overflow: hidden; }
+    .wave-fill  { height: 100%; border-radius: 2px; }
+
+    .metric { font-size: 13px; }
+    .metric.pos { color: var(--green); }
+    .metric.neg { color: var(--red); }
+    .metric.na  { color: var(--muted); }
+
+    .empty { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+
+    @media (max-width: 768px) {
+      nav, .hero, .summary, .filters, .list-wrap { padding-left: 20px; padding-right: 20px; }
+      .list-header { grid-template-columns: 2fr 1fr 1fr; }
+      .list-header .h-wave, .list-header .h-sharpe { display: none; }
+      .stock-row { grid-template-columns: 2fr 1fr 1fr; }
+      .stock-row .wave-inner, .stock-row .col-sharpe { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">bist<span>30</span>.dev</div>
+  <div class="nav-tag">Canlı Sinyal</div>
+</nav>
+
+<div class="hero">
+  <h1>BIST30 <span class="c">Wave</span><br><span class="b">Sinyalleri.</span></h1>
+  <p>Z-Score tabanlı wave stratejisi ile optimize edilmiş AL / SAT / TUT sinyalleri. Her gün otomatik güncellenir.</p>
+</div>
+
+<div class="summary">
+  <div class="pill al">
+    <div class="pill-dot"></div>
+    <div><div class="pill-num" id="cnt-al">—</div><div class="pill-label">Al Sinyali</div></div>
+  </div>
+  <div class="pill sat">
+    <div class="pill-dot"></div>
+    <div><div class="pill-num" id="cnt-sat">—</div><div class="pill-label">Sat Sinyali</div></div>
+  </div>
+  <div class="pill tut">
+    <div class="pill-dot"></div>
+    <div><div class="pill-num" id="cnt-tut">—</div><div class="pill-label">Tut</div></div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="f-btn active" data-sig="ALL">Tümü</button>
+  <button class="f-btn al"    data-sig="AL">AL</button>
+  <button class="f-btn sat"   data-sig="SAT">SAT</button>
+  <button class="f-btn tut"   data-sig="TUT">TUT</button>
+  <div class="update-info">Son güncelleme: <b id="lastUpdate">—</b></div>
+</div>
+
+<div class="list-wrap">
+  <div class="list-header">
+    <span>Sembol</span>
+    <span>Sinyal</span>
+    <span class="h-wave">Wave</span>
+    <span>Net Kâr</span>
+    <span class="h-sharpe">Sharpe</span>
+  </div>
+  <div id="listBody">
+    <div class="empty">Veriler yükleniyor…</div>
+  </div>
+</div>
+
+<script>
+const CSV_URL = './data/bist30_wave_signals.csv';
+const SIG_ORDER = { AL: 0, TUT: 1, SAT: 2, NA: 3, ERR: 4 };
+let allRows = [], activeFilter = 'ALL';
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line => {
+    const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g,''));
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = vals[i] ?? '');
+    return obj;
+  });
+}
+
+function fNum(v, dec=0) {
+  const n = parseFloat(v);
+  if (isNaN(n)) return '—';
+  return n.toLocaleString('tr-TR', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+}
+
+function waveClass(v) {
+  const n = parseFloat(v);
+  if (isNaN(n)) return 'na';
+  if (n <= -5) return 'low';
+  if (n >= 5)  return 'high';
+  return 'mid';
+}
+
+function render() {
+  let rows = activeFilter === 'ALL' ? [...allRows] : allRows.filter(r => r.Signal === activeFilter);
+  rows.sort((a,b) => {
+    const d = (SIG_ORDER[a.Signal]??9) - (SIG_ORDER[b.Signal]??9);
+    return d !== 0 ? d : (parseFloat(b.NetProfit)||0) - (parseFloat(a.NetProfit)||0);
+  });
+
+  if (!rows.length) {
+    document.getElementById('listBody').innerHTML = '<div class="empty">Bu filtre için sonuç yok.</div>';
+    return;
+  }
+
+  document.getElementById('listBody').innerHTML = rows.map((r, i) => {
+    const sig = r.Signal || 'NA';
+    const wave = parseFloat(r.Wave);
+    const pct = isNaN(wave) ? 50 : Math.min(Math.max((wave+10)/20*100,0),100);
+    const wColor = wave<=-5?'var(--green)':wave>=5?'var(--red)':'var(--yellow)';
+    const profit = parseFloat(r.NetProfit);
+    const profitStr = isNaN(profit)?'—':`${profit>=0?'+':''}${fNum(r.NetProfit,0)} ₺`;
+    const pClass = isNaN(profit)?'na':profit>=0?'pos':'neg';
+    const sharpe = parseFloat(r.Sharpe);
+    const sClass = isNaN(sharpe)?'na':sharpe>=1.5?'pos':sharpe<0.5?'neg':'';
+    const sym = (r.Symbol||'').replace('.IS','');
+    return `
+    <div class="stock-row" style="animation-delay:${i*16}ms">
+      <div class="sym-block">
+        <span class="sym-name">${sym}</span>
+        <span class="sym-sub">BIST</span>
+      </div>
+      <div><span class="sig-badge ${sig}">${sig}</span></div>
+      <div class="wave-inner">
+        <span class="wave-val ${waveClass(r.Wave)}">${isNaN(wave)?'—':wave.toFixed(2)}</span>
+        <div class="wave-track"><div class="wave-fill" style="width:${pct}%;background:${wColor}"></div></div>
+      </div>
+      <div><span class="metric ${pClass}">${profitStr}</span></div>
+      <div class="col-sharpe"><span class="metric ${sClass}">${isNaN(sharpe)?'—':fNum(r.Sharpe,2)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function updateCounts() {
+  document.getElementById('cnt-al').textContent  = allRows.filter(r=>r.Signal==='AL').length;
+  document.getElementById('cnt-sat').textContent = allRows.filter(r=>r.Signal==='SAT').length;
+  document.getElementById('cnt-tut').textContent = allRows.filter(r=>r.Signal==='TUT').length;
+}
+
+async function load() {
+  try {
+    const res = await fetch(CSV_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error();
+    allRows = parseCSV(await res.text());
+    updateCounts();
+    render();
+    document.getElementById('lastUpdate').textContent =
+      new Date().toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  } catch {
+    document.getElementById('listBody').innerHTML =
+      `<div class="empty">CSV bulunamadı — <code style="color:var(--cyan)">data/bist30_wave_signals.csv</code> dosyasını repo'ya ekle.</div>`;
+  }
+}
+
+document.querySelectorAll('.f-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.sig;
+    render();
+  });
+});
+
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>
