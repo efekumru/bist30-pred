@@ -8,16 +8,9 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg: #0a0a0b;
-      --border: #1c1c22;
-      --border2: #222228;
-      --green: #34d399;
-      --red: #f87171;
-      --yellow: #fbbf24;
-      --blue: #60a5fa;
-      --text: #e8e8f0;
-      --muted: #8888a0;
-      --mono: 'Geist Mono', monospace;
+      --bg: #0a0a0b; --border: #1c1c22; --border2: #222228;
+      --green: #34d399; --red: #f87171; --yellow: #fbbf24;
+      --text: #e8e8f0; --muted: #8888a0; --mono: 'Geist Mono', monospace;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; }
 
@@ -25,44 +18,24 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 44px; border-bottom: 1px solid var(--border);
     }
-    .logo { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 1.5px; text-transform: uppercase; }
-    .nav-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 20px; }
+    .logo { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
     .nav-date { font-size: 11px; color: var(--muted); }
-    .nav-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
-    /* ── ENDEKS ── */
     .endeks { padding: 36px 44px 32px; border-bottom: 1px solid var(--border); }
     .endeks-row1 { display: flex; align-items: baseline; gap: 20px; margin-bottom: 6px; }
     .endeks-ticker { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
-    .endeks-open { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .endeks-open { font-size: 28px; font-weight: 700; color: #fff; }
     .endeks-karar { font-size: 14px; font-weight: 600; }
     .endeks-karar.up  { color: var(--green); }
     .endeks-karar.dn  { color: var(--red); }
-    .endeks-karar.neu { color: var(--yellow); }
-    .endeks-sub { font-size: 10px; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.5px; }
+    .endeks-sub { font-size: 10px; color: var(--muted); }
 
-    .endeks-row2 { display: flex; align-items: center; flex-wrap: wrap; }
-    .e-block {
-      display: flex; align-items: center; gap: 10px;
-      padding-right: 28px; margin-right: 28px;
-      border-right: 1px solid var(--border);
-    }
-    .e-block:last-child { border-right: none; margin-right: 0; padding-right: 0; }
-    .e-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
-    .e-sig { font-size: 11px; font-weight: 600; }
-    .e-sig.up { color: var(--green); } .e-sig.dn { color: var(--red); } .e-sig.na { color: var(--muted); }
-    .e-sig.poz { color: var(--green); } .e-sig.neg { color: var(--red); }
-    .e-acc { font-size: 11px; color: var(--muted); }
-    .e-sep { font-size: 10px; color: var(--border2); margin: 0 4px; }
-
-    /* ── TABLE ── */
     .table-section { padding: 28px 44px 80px; }
-    .table-controls { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+    .table-controls { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; }
     .f-btn {
       font-family: var(--mono); font-size: 11px; font-weight: 500;
       background: transparent; border: 1px solid var(--border2);
-      color: var(--muted); padding: 4px 12px; border-radius: 3px;
-      cursor: pointer; transition: all .1s; letter-spacing: 0.5px;
+      color: var(--muted); padding: 4px 12px; border-radius: 3px; cursor: pointer; transition: all .1s;
     }
     .f-btn:hover  { border-color: var(--text); color: var(--text); }
     .f-btn.active { border-color: var(--text); color: var(--text); background: var(--border2); }
@@ -76,23 +49,14 @@
     td { padding: 12px 10px; font-size: 12px; }
 
     .td-sym  { font-weight: 700; color: #fff; font-size: 13px; }
-    .td-open { color: var(--muted); }
-    .td-sig  { font-weight: 600; font-size: 11px; }
-    .td-sig.up { color: var(--green); } .td-sig.dn { color: var(--red); } .td-sig.na { color: var(--muted); }
-    .td-wave { font-size: 11px; }
-    .td-wave.poz { color: var(--green); } .td-wave.neg { color: var(--red); } .td-wave.na { color: var(--muted); }
-    .td-karar { font-weight: 600; font-size: 11px; }
-    .td-karar.up  { color: var(--green); } .td-karar.dn  { color: var(--red); } .td-karar.neu { color: var(--yellow); }
-    .td-guven { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+    .td-muted { color: var(--muted); }
+    .td-karar.up { color: var(--green); font-weight: 600; font-size: 11px; }
+    .td-karar.dn { color: var(--red);   font-weight: 600; font-size: 11px; }
 
     .empty-row td { text-align: center; padding: 48px; color: var(--muted); font-size: 11px; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
-
     @media (max-width: 768px) {
       nav, .endeks, .table-section { padding-left: 20px; padding-right: 20px; }
-      .hide-mobile { display: none; }
-      .endeks-row2 { gap: 12px; }
-      .e-block { padding-right: 16px; margin-right: 16px; }
     }
   </style>
 </head>
@@ -100,42 +64,16 @@
 
 <nav>
   <div class="logo">XU030 — Up/Down</div>
-  <div class="nav-meta">
-    <span class="nav-label">Predicting tomorrow's close vs today's close</span>
-    <span class="nav-date" id="navDate">—</span>
-  </div>
+  <div class="nav-date" id="navDate">—</div>
 </nav>
 
 <div class="endeks">
   <div class="endeks-row1">
     <span class="endeks-ticker">BIST30</span>
     <span class="endeks-open" id="xu030Open">—</span>
-    <span class="endeks-karar" id="endeksKarar">—</span>
+    <span class="endeks-karar" id="endeksKarar"></span>
   </div>
   <div class="endeks-sub" id="endeksTarih">—</div>
-
-  <div class="endeks-row2">
-    <div class="e-block">
-      <span class="e-label">LightGBM+XGB</span>
-      <span class="e-sig" id="sig-model">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="sig-guven">—</span>
-    </div>
-    <div class="e-block">
-      <span class="e-label">Wave</span>
-      <span class="e-sig" id="sig-wave-regime">—</span>
-      <span class="e-sep">·</span>
-      <span class="e-acc" id="sig-wave-val">—</span>
-    </div>
-    <div class="e-block hide-mobile">
-      <span class="e-label">Filter</span>
-      <span class="e-acc" id="sig-filter">—</span>
-    </div>
-    <div class="e-block hide-mobile">
-      <span class="e-label">CV Acc</span>
-      <span class="e-acc" id="sig-acc">—</span>
-    </div>
-  </div>
 </div>
 
 <div class="table-section">
@@ -143,7 +81,6 @@
     <button class="f-btn active" data-sig="ALL">All</button>
     <button class="f-btn" data-sig="UP">Up</button>
     <button class="f-btn" data-sig="DOWN">Down</button>
-    <button class="f-btn" data-sig="NEUTRAL">Neutral</button>
     <div class="table-meta" id="lastUpdate">—</div>
   </div>
   <table>
@@ -151,15 +88,11 @@
       <tr>
         <th>Ticker</th>
         <th>Kapanış</th>
-        <th>Model</th>
-        <th class="hide-mobile">Güven</th>
-        <th class="hide-mobile">Wave</th>
-        <th class="hide-mobile">W.Val</th>
         <th>Karar</th>
       </tr>
     </thead>
     <tbody id="tableBody">
-      <tr class="empty-row"><td colspan="7">Loading...</td></tr>
+      <tr class="empty-row"><td colspan="3">Loading...</td></tr>
     </tbody>
   </table>
 </div>
@@ -179,109 +112,73 @@ function parseCSV(text) {
   });
 }
 
-function sigClass(v) {
-  const n = parseInt(v);
-  return n===1?'up':n===0?'dn':'na';
-}
-function sigText(v) {
-  const n = parseInt(v);
-  return n===1?'Up':n===0?'Down':'—';
-}
-
 function cleanKarar(raw) {
-  if (!raw) return { text: '—', dir: 'neu' };
+  if (!raw) return null;
   const r = raw.toUpperCase();
-  if (r.includes('UP')) return { text: 'UP', dir: 'up' };
+  if (r.includes('UP'))   return { text: 'UP',   dir: 'up' };
   if (r.includes('DOWN')) return { text: 'DOWN', dir: 'dn' };
-  return { text: 'NEUTRAL', dir: 'neu' };
-}
-
-function waveRegimeClass(r) {
-  if (!r) return 'na';
-  return r.toUpperCase().includes('POZ') ? 'poz' : 'neg';
+  return null; // neutral → gösterme
 }
 
 function renderEndeks(d) {
   const op = parseFloat(d.close ?? d.open);
   document.getElementById('xu030Open').textContent =
-    isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    isNaN(op) ? '—' : op.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
   document.getElementById('endeksTarih').textContent = d.tarih || '—';
 
-  const k   = cleanKarar(d.karar);
+  const k = cleanKarar(d.karar);
   const kEl = document.getElementById('endeksKarar');
-  kEl.textContent = k.text;
-  kEl.className   = 'endeks-karar ' + k.dir;
-
-  // Model sinyali
-  const modelEl = document.getElementById('sig-model');
-  const modelYon = d.model_yon ?? d.lgbm;
-  modelEl.textContent = sigText(modelYon);
-  modelEl.className   = 'e-sig ' + sigClass(modelYon);
-  document.getElementById('sig-guven').textContent =
-    d.model_guven ? d.model_guven + '%' : '—';
-
-  // Wave
-  const waveEl = document.getElementById('sig-wave-regime');
-  const regime = d.wave_regime || '';
-  waveEl.textContent = regime || '—';
-  waveEl.className   = 'e-sig ' + waveRegimeClass(regime);
-  document.getElementById('sig-wave-val').textContent =
-    d.wave_val !== undefined ? parseFloat(d.wave_val).toFixed(3) : '—';
-
-  // Filter note & CV acc
-  document.getElementById('sig-filter').textContent = d.filter_note || '—';
-  document.getElementById('sig-acc').textContent =
-    d.model_acc ? d.model_acc + '%' : '—';
+  if (k) {
+    kEl.textContent = k.text;
+    kEl.className   = 'endeks-karar ' + k.dir;
+  } else {
+    kEl.textContent = '';
+    kEl.className   = 'endeks-karar';
+  }
 }
 
 function render() {
   let rows = [...allRows];
-  if (activeFilter==='UP')      rows = rows.filter(r => cleanKarar(r.Karar).dir==='up');
-  else if (activeFilter==='DOWN')    rows = rows.filter(r => cleanKarar(r.Karar).dir==='dn');
-  else if (activeFilter==='NEUTRAL') rows = rows.filter(r => cleanKarar(r.Karar).dir==='neu');
+
+  // Önce neutral'leri filtrele
+  rows = rows.filter(r => cleanKarar(r.Karar) !== null);
+
+  if (activeFilter === 'UP')        rows = rows.filter(r => cleanKarar(r.Karar)?.dir === 'up');
+  else if (activeFilter === 'DOWN') rows = rows.filter(r => cleanKarar(r.Karar)?.dir === 'dn');
 
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
-    tbody.innerHTML='<tr class="empty-row"><td colspan="7">No signals found.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="3">No signals found.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = rows.map((r,i) => {
+  tbody.innerHTML = rows.map((r, i) => {
     const k    = cleanKarar(r.Karar);
     const op   = parseFloat(r.Kapanis ?? r.Open);
-    const opStr= isNaN(op)?'—':op.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
-    const guven= r.Guven ? r.Guven+'%' : '—';
-    const waveVal = r.Wave_val !== undefined ? parseFloat(r.Wave_val).toFixed(2) : '—';
-    const wRegime = r.Wave_regime || '';
-    const wCls = waveRegimeClass(wRegime);
+    const opStr= isNaN(op) ? '—' : op.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
 
     return `<tr style="animation:fadeIn .18s ${i*8}ms both">
       <td class="td-sym">${r.Hisse||'—'}</td>
-      <td class="td-open">${opStr}</td>
-      <td class="td-sig ${sigClass(r.LightGBM)}">${sigText(r.LightGBM)}</td>
-      <td class="td-open hide-mobile">${guven}</td>
-      <td class="td-wave ${wCls} hide-mobile">${wRegime||'—'}</td>
-      <td class="td-open hide-mobile">${waveVal}</td>
-      <td><span class="td-karar ${k.dir}">${k.text}</span><span class="td-guven">${r.Cakisma||''}</span></td>
+      <td class="td-muted">${opStr}</td>
+      <td class="td-karar ${k.dir}">${k.text}</td>
     </tr>`;
   }).join('');
 }
 
 async function load() {
   try {
-    const eRes = await fetch(ENDEKS_URL+'?t='+Date.now());
+    const eRes = await fetch(ENDEKS_URL + '?t=' + Date.now());
     if (eRes.ok) renderEndeks(await eRes.json());
-    const hRes = await fetch(HISSE_URL+'?t='+Date.now());
+    const hRes = await fetch(HISSE_URL + '?t=' + Date.now());
     if (!hRes.ok) throw new Error();
     allRows = parseCSV(await hRes.text());
     render();
-    const now = new Date();
-    const ts  = now.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const ts = new Date().toLocaleString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
     document.getElementById('navDate').textContent    = ts;
     document.getElementById('lastUpdate').textContent = ts;
   } catch {
     document.getElementById('tableBody').innerHTML =
-      '<tr class="empty-row"><td colspan="7">data/ folder missing — run main.py</td></tr>';
+      '<tr class="empty-row"><td colspan="3">data/ folder missing — run main.py</td></tr>';
   }
 }
 
@@ -293,7 +190,7 @@ document.querySelectorAll('.f-btn').forEach(btn => {
 });
 
 load();
-setInterval(load, 5*60*1000);
+setInterval(load, 5 * 60 * 1000);
 </script>
 </body>
 </html>
