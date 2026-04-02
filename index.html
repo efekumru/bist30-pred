@@ -10,7 +10,7 @@
     :root {
       --bg: #0a0a0b; --border: #1c1c22; --border2: #222228;
       --green: #34d399; --red: #f87171; --yellow: #fbbf24;
-      --text: #e8e8f0; --muted: #8888a0; --mono: 'Geist Mono', monospace;
+      --text: #f4f4f8; --muted: #b0b0c8; --mono: 'Geist Mono', monospace;
     }
     body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; }
 
@@ -102,19 +102,19 @@
   <div class="endeks-sub" id="endeksTarih">—</div>
 
   <div class="endeks-row2">
-    <div class="e-block">
-      <span class="e-label">LightGBM+XGB</span>
+    <div class="e-block" title="LightGBM ve XGBoost ensemble tahmini · Güven: modelin emin olma oranı (%58 altı = tahmin üretmez)">
+      <span class="e-label">Model</span>
       <span class="e-sig" id="sig-model">—</span>
       <span class="e-sep">·</span>
-      <span class="e-acc" id="sig-guven">—</span>
+      <span class="e-acc" id="sig-guven" title="Güven skoru — %58 altında model NEUTRAL döner">—</span>
     </div>
-    <div class="e-block">
+    <div class="e-block" title="Wave Oscillatör: -10 ile +10 arası. POZ = yukarı baskı, NEG = aşağı baskı">
       <span class="e-label">Wave</span>
       <span class="e-sig" id="sig-wave-regime">—</span>
       <span class="e-sep">·</span>
-      <span class="e-acc" id="sig-wave-val">—</span>
+      <span class="e-acc" id="sig-wave-val" title="Wave değeri: -10 (tam negatif) → +10 (tam pozitif)">—</span>
     </div>
-    <div class="e-block hide-mobile">
+    <div class="e-block hide-mobile" title="Cross-Validation Accuracy — son 2 yıllık veriye göre modelin doğruluk oranı">
       <span class="e-label">CV Acc</span>
       <span class="e-acc" id="sig-acc">—</span>
     </div>
