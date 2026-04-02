@@ -18,24 +18,42 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 44px; border-bottom: 1px solid var(--border);
     }
-    .logo { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .logo { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 1.5px; text-transform: uppercase; }
+    .nav-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 20px; }
     .nav-date { font-size: 11px; color: var(--muted); }
+    .nav-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
     .endeks { padding: 36px 44px 32px; border-bottom: 1px solid var(--border); }
     .endeks-row1 { display: flex; align-items: baseline; gap: 20px; margin-bottom: 6px; }
     .endeks-ticker { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
-    .endeks-open { font-size: 28px; font-weight: 700; color: #fff; }
+    .endeks-open { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
     .endeks-karar { font-size: 14px; font-weight: 600; }
     .endeks-karar.up  { color: var(--green); }
     .endeks-karar.dn  { color: var(--red); }
-    .endeks-sub { font-size: 10px; color: var(--muted); }
+    .endeks-karar.neu { color: var(--yellow); }
+    .endeks-sub { font-size: 10px; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.5px; }
+
+    .endeks-row2 { display: flex; align-items: center; flex-wrap: wrap; }
+    .e-block {
+      display: flex; align-items: center; gap: 10px;
+      padding-right: 28px; margin-right: 28px;
+      border-right: 1px solid var(--border);
+    }
+    .e-block:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+    .e-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+    .e-sig { font-size: 11px; font-weight: 600; }
+    .e-sig.up  { color: var(--green); } .e-sig.dn { color: var(--red); } .e-sig.na { color: var(--muted); }
+    .e-sig.poz { color: var(--green); } .e-sig.neg { color: var(--red); }
+    .e-acc { font-size: 11px; color: var(--muted); }
+    .e-sep { font-size: 10px; color: var(--border2); margin: 0 4px; }
 
     .table-section { padding: 28px 44px 80px; }
-    .table-controls { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; }
+    .table-controls { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
     .f-btn {
       font-family: var(--mono); font-size: 11px; font-weight: 500;
       background: transparent; border: 1px solid var(--border2);
-      color: var(--muted); padding: 4px 12px; border-radius: 3px; cursor: pointer; transition: all .1s;
+      color: var(--muted); padding: 4px 12px; border-radius: 3px;
+      cursor: pointer; transition: all .1s; letter-spacing: 0.5px;
     }
     .f-btn:hover  { border-color: var(--text); color: var(--text); }
     .f-btn.active { border-color: var(--text); color: var(--text); background: var(--border2); }
@@ -48,15 +66,20 @@
     tbody tr:hover { background: rgba(255,255,255,.015); }
     td { padding: 12px 10px; font-size: 12px; }
 
-    .td-sym  { font-weight: 700; color: #fff; font-size: 13px; }
-    .td-muted { color: var(--muted); }
-    .td-karar.up { color: var(--green); font-weight: 600; font-size: 11px; }
-    .td-karar.dn { color: var(--red);   font-weight: 600; font-size: 11px; }
+    .td-sym   { font-weight: 700; color: #fff; font-size: 13px; }
+    .td-open  { color: var(--muted); }
+    .td-karar { font-weight: 600; font-size: 11px; }
+    .td-karar.up  { color: var(--green); }
+    .td-karar.dn  { color: var(--red); }
+    .td-karar.neu { color: var(--yellow); }
 
     .empty-row td { text-align: center; padding: 48px; color: var(--muted); font-size: 11px; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
     @media (max-width: 768px) {
       nav, .endeks, .table-section { padding-left: 20px; padding-right: 20px; }
+      .hide-mobile { display: none; }
+      .endeks-row2 { gap: 12px; }
+      .e-block { padding-right: 16px; margin-right: 16px; }
     }
   </style>
 </head>
@@ -64,7 +87,10 @@
 
 <nav>
   <div class="logo">XU030 — Up/Down</div>
-  <div class="nav-date" id="navDate">—</div>
+  <div class="nav-meta">
+    <span class="nav-label">Predicting tomorrow's close vs today's close</span>
+    <span class="nav-date" id="navDate">—</span>
+  </div>
 </nav>
 
 <div class="endeks">
@@ -74,6 +100,25 @@
     <span class="endeks-karar" id="endeksKarar"></span>
   </div>
   <div class="endeks-sub" id="endeksTarih">—</div>
+
+  <div class="endeks-row2">
+    <div class="e-block">
+      <span class="e-label">LightGBM+XGB</span>
+      <span class="e-sig" id="sig-model">—</span>
+      <span class="e-sep">·</span>
+      <span class="e-acc" id="sig-guven">—</span>
+    </div>
+    <div class="e-block">
+      <span class="e-label">Wave</span>
+      <span class="e-sig" id="sig-wave-regime">—</span>
+      <span class="e-sep">·</span>
+      <span class="e-acc" id="sig-wave-val">—</span>
+    </div>
+    <div class="e-block hide-mobile">
+      <span class="e-label">CV Acc</span>
+      <span class="e-acc" id="sig-acc">—</span>
+    </div>
+  </div>
 </div>
 
 <div class="table-section">
@@ -88,7 +133,7 @@
       <tr>
         <th>Ticker</th>
         <th>Kapanış</th>
-        <th>Karar</th>
+        <th>Decision</th>
       </tr>
     </thead>
     <tbody id="tableBody">
@@ -112,12 +157,32 @@ function parseCSV(text) {
   });
 }
 
+function modelText(v) {
+  const n = parseFloat(v);
+  if (n === 1) return 'Up';
+  if (n === 0) return 'Down';
+  return '—';
+}
+function modelClass(v) {
+  const n = parseFloat(v);
+  if (n === 1) return 'up';
+  if (n === 0) return 'dn';
+  return 'na';
+}
+
+function waveInfo(r) {
+  const s = String(r ?? '').trim().toUpperCase();
+  if (s === 'POZ' || s === '1' || s === '1.0') return { cls: 'poz', txt: 'POZ' };
+  if (s === 'NEG' || s === '0' || s === '0.0') return { cls: 'neg', txt: 'NEG' };
+  return { cls: 'na', txt: '—' };
+}
+
 function cleanKarar(raw) {
-  if (!raw) return null;
+  if (!raw) return { text: 'NEUTRAL', dir: 'neu' };
   const r = raw.toUpperCase();
-  if (r.includes('UP'))   return { text: 'UP',   dir: 'up' };
-  if (r.includes('DOWN')) return { text: 'DOWN', dir: 'dn' };
-  return null; // neutral → gösterme
+  if (r.includes('UP'))   return { text: 'UP',      dir: 'up' };
+  if (r.includes('DOWN')) return { text: 'DOWN',    dir: 'dn' };
+  return { text: 'NEUTRAL', dir: 'neu' };
 }
 
 function renderEndeks(d) {
@@ -128,23 +193,35 @@ function renderEndeks(d) {
 
   const k = cleanKarar(d.karar);
   const kEl = document.getElementById('endeksKarar');
-  if (k) {
+  if (k.dir !== 'neu') {
     kEl.textContent = k.text;
     kEl.className   = 'endeks-karar ' + k.dir;
   } else {
     kEl.textContent = '';
     kEl.className   = 'endeks-karar';
   }
+
+  const mv = d.model_yon ?? d.lgbm;
+  const mEl = document.getElementById('sig-model');
+  mEl.textContent = modelText(mv);
+  mEl.className   = 'e-sig ' + modelClass(mv);
+  document.getElementById('sig-guven').textContent = d.model_guven ? d.model_guven + '%' : '—';
+
+  const wi = waveInfo(d.wave_regime);
+  const wEl = document.getElementById('sig-wave-regime');
+  wEl.textContent = wi.txt;
+  wEl.className   = 'e-sig ' + wi.cls;
+  document.getElementById('sig-wave-val').textContent =
+    d.wave_val !== undefined ? parseFloat(d.wave_val).toFixed(3) : '—';
+
+  document.getElementById('sig-acc').textContent = d.model_acc ? d.model_acc + '%' : '—';
 }
 
 function render() {
   let rows = [...allRows];
-
-  // Önce neutral'leri filtrele
-  rows = rows.filter(r => cleanKarar(r.Karar) !== null);
-
-  if (activeFilter === 'UP')        rows = rows.filter(r => cleanKarar(r.Karar)?.dir === 'up');
-  else if (activeFilter === 'DOWN') rows = rows.filter(r => cleanKarar(r.Karar)?.dir === 'dn');
+  if (activeFilter === 'UP')        rows = rows.filter(r => cleanKarar(r.Karar).dir === 'up');
+  else if (activeFilter === 'DOWN') rows = rows.filter(r => cleanKarar(r.Karar).dir === 'dn');
+  else rows = rows.filter(r => cleanKarar(r.Karar).dir !== 'neu');
 
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
@@ -156,10 +233,9 @@ function render() {
     const k    = cleanKarar(r.Karar);
     const op   = parseFloat(r.Kapanis ?? r.Open);
     const opStr= isNaN(op) ? '—' : op.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2});
-
     return `<tr style="animation:fadeIn .18s ${i*8}ms both">
       <td class="td-sym">${r.Hisse||'—'}</td>
-      <td class="td-muted">${opStr}</td>
+      <td class="td-open">${opStr}</td>
       <td class="td-karar ${k.dir}">${k.text}</td>
     </tr>`;
   }).join('');
