@@ -11,5 +11,8 @@
   "wave_slope": 8.1846,
   "wave_accel": 8.2004,
   "wave_zscore": 4.16,
-  "wave_regime": "NEG"
+  "wave_regime": "NEG",
+  "bt_dogru": 1,
+  "bt_toplam": 1,
+  "bt_acc": 100.0
 }
