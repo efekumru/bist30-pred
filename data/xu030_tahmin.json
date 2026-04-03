@@ -1,16 +1,1 @@
-{
-  "tarih": "2026-04-02",
-  "close": 14686.8,
-  "karar": "NEUTRAL",
-  "guc": "1/1",
-  "model_yon": -1,
-  "model_guven": 53.9,
-  "model_acc": 55.2,
-  "model_neutral": true,
-  "wave_val": -5.908,
-  "wave_slope": -0.0907,
-  "wave_accel": 0.092,
-  "wave_zscore": -0.976,
-  "wave_regime": "NEG",
-  "filter_note": "model_neutral"
-}
+{"open": 15711.4, "tarih": "2026-02-25", "karar": "ORTA YÜKSELİŞ", "guc": "✅ ORTA (2/3)", "prophet": 1, "prophet_deg": 2.86, "lgbm": 1, "lgbm_acc": 55.1, "xgb": 0, "xgb_acc": 51.2}
