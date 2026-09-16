@@ -1,8 +1,35 @@
 {
   "tarih": "2026-09-16",
-  "close": 15850.59,
-  "karar": "DOWN",
-  "model_yon": 0,
-  "model_guven": 71.8,
-  "model_acc": 54.8
+  "close": 15645.19,
+  "karar": "STRONG UP",
+  "model_yon": 1,
+  "model_guven": 66.6,
+  "model_acc": 54.0,
+  "model_detay": {
+    "LogisticRegression": {
+      "yon": 1,
+      "guven": 53.0,
+      "cv_acc": 51.0
+    },
+    "KNN": {
+      "yon": 1,
+      "guven": 60.0,
+      "cv_acc": 54.1
+    },
+    "DecisionTree": {
+      "yon": 1,
+      "guven": 60.1,
+      "cv_acc": 50.5
+    },
+    "XGBoost": {
+      "yon": 1,
+      "guven": 55.6,
+      "cv_acc": 50.8
+    },
+    "LightGBM": {
+      "yon": 1,
+      "guven": 73.2,
+      "cv_acc": 54.0
+    }
+  }
 }

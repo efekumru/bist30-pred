@@ -1,0 +1,6 @@
+﻿Model,Ortalama_CV_Acc,Basarili
+LogisticRegression,50.2,False
+KNN,50.2,False
+DecisionTree,50.6,False
+XGBoost,50.6,False
+LightGBM,50.5,False
