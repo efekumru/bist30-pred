@@ -1,18 +1,8 @@
 {
-  "tarih": "2026-04-09",
-  "close": 15539.07,
-  "karar": "NEUTRAL",
-  "guc": "1/1",
-  "model_yon": -1,
-  "model_guven": 52.9,
-  "model_acc": 52.9,
-  "model_neutral": true,
-  "wave_val": 7.904,
-  "wave_slope": 0.4964,
-  "wave_accel": -2.0944,
-  "wave_zscore": 1.379,
-  "wave_regime": "POZ",
-  "bt_dogru": 3,
-  "bt_toplam": 3,
-  "bt_acc": 100.0
+  "tarih": "2026-09-16",
+  "close": 15850.59,
+  "karar": "DOWN",
+  "model_yon": 0,
+  "model_guven": 71.8,
+  "model_acc": 54.8
 }
